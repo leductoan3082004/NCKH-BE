@@ -11,6 +11,12 @@ type Post struct {
 	Author              string `json:"author" bson:"author"`
 }
 
+type PostCreate struct {
+	Title   string `json:"title" binding:"title"`
+	Content string `json:"content" binding:"content"`
+	Author  string `json:"author" binding:"author"`
+}
+
 func (Post) TableName() string {
 	return "post"
 }

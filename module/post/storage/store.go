@@ -1,4 +1,4 @@
-package userstorage
+package poststorage
 
 import (
 	"go.mongodb.org/mongo-driver/mongo"

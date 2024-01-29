@@ -1,4 +1,4 @@
-package userstorage
+package poststorage
 
 import (
 	"context"
