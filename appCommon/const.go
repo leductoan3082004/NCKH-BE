@@ -7,6 +7,12 @@ const (
 
 	DBMain      = "mongodb"
 	PluginRedis = "redis"
+	PluginJWT   = "jwt"
+	PluginAWS   = "aws"
+)
+
+const (
+	ExpiryAccessToken = 60 * 60 * 12 * 365
 )
 
 type TokenPayload struct {

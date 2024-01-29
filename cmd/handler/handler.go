@@ -3,6 +3,7 @@ package handler
 import (
 	"github.com/gin-gonic/gin"
 	goservice "github.com/lequocbinh04/go-sdk"
+	"nckh-BE/middleware"
 	usergin "nckh-BE/module/user/transport/gin"
 )
 
@@ -12,5 +13,7 @@ func MainRoute(router *gin.Engine, sc goservice.ServiceContext) {
 			"status": "pong",
 		})
 	})
+	router.Use(middleware.Recover())
 	router.POST("v1/register", usergin.Register(sc))
+	router.POST("/v1/login", usergin.Login(sc))
 }

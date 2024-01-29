@@ -3,11 +3,13 @@ package cmd
 import (
 	"github.com/gin-gonic/gin"
 	goservice "github.com/lequocbinh04/go-sdk"
+	"github.com/lequocbinh04/go-sdk/plugin/aws"
 	"github.com/lequocbinh04/go-sdk/plugin/storage/sdkmgo"
 	"github.com/spf13/cobra"
 	"nckh-BE/appCommon"
 	"nckh-BE/cmd/handler"
 	"nckh-BE/plugin/appredis"
+	jwtProvider "nckh-BE/plugin/tokenprovider/jwt"
 )
 
 func newService() goservice.Service {
@@ -17,6 +19,8 @@ func newService() goservice.Service {
 		goservice.WithVersion("1.0.0"),
 		goservice.WithInitRunnable(sdkmgo.NewMongoDB("mongodb", appCommon.DBMain)),
 		goservice.WithInitRunnable(appredis.NewRedisDB("redis", appCommon.PluginRedis)),
+		goservice.WithInitRunnable(jwtProvider.NewJwtProvider("jwt", appCommon.PluginJWT)),
+		goservice.WithInitRunnable(aws.New("aws", appCommon.PluginAWS)),
 	)
 
 	if err := service.Init(); err != nil {

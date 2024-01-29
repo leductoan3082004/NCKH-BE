@@ -38,4 +38,10 @@ var (
 		"username has already existed",
 		"ErrUsernameExisted",
 	)
+	ErrUsernameOrPasswordInvalid = appCommon.NewCustomError(
+		http.StatusBadRequest,
+		errors.New("username or password is invalid"),
+		"username or password is invalid",
+		"ErrUsernameOrPasswordInvalid",
+	)
 )
