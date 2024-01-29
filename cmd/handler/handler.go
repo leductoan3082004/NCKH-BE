@@ -19,7 +19,10 @@ func MainRoute(router *gin.Engine, sc goservice.ServiceContext) {
 	router.POST("v1/login", usergin.Login(sc))
 
 	authedRoutes := router.Group("v1")
+
+	post := authedRoutes.Group("/post")
 	{
-		authedRoutes.POST("/", postgin.Create(sc))
+		post.POST("/", postgin.Create(sc))
+		post.PUT("/", postgin.Update(sc))
 	}
 }

@@ -16,6 +16,12 @@ type PostCreate struct {
 	Content string `json:"content" binding:"content"`
 	Author  string `json:"author" binding:"author"`
 }
+type PostUpdate struct {
+	PostId  string  `json:"post_id" binding:"required"`
+	Title   *string `json:"title"`
+	Content *string `json:"content"`
+	Author  *string `json:"author"`
+}
 
 func (Post) TableName() string {
 	return "post"
