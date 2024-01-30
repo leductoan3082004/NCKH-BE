@@ -28,6 +28,7 @@ func (biz *createBiz) Create(ctx context.Context, data *postmodel.PostCreate) (*
 		Title:   data.Title,
 		Content: data.Content,
 		Author:  data.Author,
+		Type:    data.Type,
 	}
 	if err := biz.store.Create(ctx, createData); err != nil {
 		biz.logger.WithSrc().Errorln(err)

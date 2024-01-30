@@ -41,6 +41,9 @@ func (biz *updateBiz) Update(ctx context.Context, data *postmodel.PostUpdate) er
 	if data.Content != nil {
 		update["content"] = *data.Content
 	}
+	if data.Type != nil {
+		update["type"] = *data.Type
+	}
 
 	condition := bson.M{
 		"_id": postId,
