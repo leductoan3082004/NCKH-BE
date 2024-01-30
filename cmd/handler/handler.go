@@ -4,6 +4,7 @@ import (
 	"github.com/gin-gonic/gin"
 	goservice "github.com/lequocbinh04/go-sdk"
 	"nckh-BE/middleware"
+	imagegin "nckh-BE/module/image/transport/gin"
 	postgin "nckh-BE/module/post/transport/gin"
 	usergin "nckh-BE/module/user/transport/gin"
 )
@@ -28,5 +29,12 @@ func MainRoute(router *gin.Engine, sc goservice.ServiceContext) {
 		post.DELETE("/", postgin.Delete(sc))
 	}
 	authedRoutes.GET("/post", postgin.List(sc))
+
+	image := authedRoutes.Group("image", middleware.AdminAuthorization())
+	{
+		image.POST("/", imagegin.UploadByFile(sc))
+		image.DELETE("/", imagegin.Delete(sc))
+		image.GET("/", imagegin.List(sc))
+	}
 
 }

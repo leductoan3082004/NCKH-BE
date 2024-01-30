@@ -22,6 +22,7 @@ func NewPostListBiz(store PostListStore) *PostListBiz {
 }
 
 func (biz *PostListBiz) ListDataWithCondition(ctx context.Context, paging *appCommon.Paging, moreInfo ...string) ([]postmodel.Post, error) {
+	paging.Fulfill()
 	res, err := biz.store.ListDataWithCondition(ctx, nil, paging, moreInfo...)
 	if err != nil {
 		biz.logger.WithSrc().Errorln(err)
