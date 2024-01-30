@@ -12,6 +12,9 @@ const (
 )
 
 const (
+	CurrentUser = "user"
+)
+const (
 	ExpiryAccessToken = 60 * 60 * 12 * 365
 )
 
