@@ -6,9 +6,10 @@ const EntityName = "Post"
 
 type Post struct {
 	appCommon.MgDBModel `json:",inline"`
-	Title               string `json:"title" bson:"title"`
-	Content             string `json:"content" bson:"content"`
-	Author              string `json:"author" bson:"author"`
+	Title               string   `json:"title" bson:"title"`
+	Content             string   `json:"content" bson:"content"`
+	Author              string   `json:"author" bson:"author"`
+	ImageUrl            []string `json:"image_url" bson:"image_url"`
 }
 
 type PostCreate struct {

@@ -1,5 +1,7 @@
 package appCommon
 
+import "os"
+
 type DbType int
 
 const (
@@ -14,6 +16,12 @@ const (
 const (
 	CurrentUser = "user"
 )
+
+var (
+	S3Domain = os.Getenv("AWS_DOMAIN")
+	S3Path   = "images"
+)
+
 const (
 	ExpiryAccessToken = 60 * 60 * 12 * 365
 )
