@@ -2,7 +2,7 @@ package poststorage
 
 import (
 	"context"
-	"github.com/globalsign/mgo/bson"
+	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo/options"
 	"nckh-BE/appCommon"

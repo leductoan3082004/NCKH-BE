@@ -2,8 +2,8 @@ package poststorage
 
 import (
 	"context"
-	"github.com/globalsign/mgo/bson"
 	"github.com/mitchellh/mapstructure"
+	"go.mongodb.org/mongo-driver/bson"
 	"nckh-BE/appCommon"
 	postmodel "nckh-BE/module/post/model"
 	"time"
