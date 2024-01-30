@@ -8,6 +8,9 @@ type Image struct {
 	appCommon.MgDBModel `json:",inline" bson:",inline"`
 	Url                 string `json:"url" bson:"url"`
 }
+type ImageDelete struct {
+	ImageId string `json:"image_id" binding:"required"`
+}
 
 func (Image) TableName() string {
 	return "image"
