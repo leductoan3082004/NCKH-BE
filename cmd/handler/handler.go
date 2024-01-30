@@ -25,6 +25,7 @@ func MainRoute(router *gin.Engine, sc goservice.ServiceContext) {
 	{
 		post.POST("/", postgin.Create(sc))
 		post.PUT("/", postgin.Update(sc))
+		post.DELETE("/", postgin.Delete(sc))
 	}
 	authedRoutes.GET("/post", postgin.List(sc))
 

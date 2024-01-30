@@ -22,6 +22,9 @@ type PostUpdate struct {
 	Content *string `json:"content"`
 	Author  *string `json:"author"`
 }
+type PostDelete struct {
+	PostId string `json:"post_id" binding:"required"`
+}
 
 func (Post) TableName() string {
 	return "post"
