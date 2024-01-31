@@ -2,8 +2,8 @@ package postbiz
 
 import (
 	"context"
-	"github.com/globalsign/mgo/bson"
 	"github.com/lequocbinh04/go-sdk/logger"
+	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"nckh-BE/appCommon"
 	postmodel "nckh-BE/module/post/model"
@@ -55,7 +55,9 @@ func (biz *updateBiz) Update(ctx context.Context, data *postmodel.PostUpdate) er
 		"_id": postId,
 	}
 
-	if err := biz.store.Update(ctx, condition, update); err != nil {
+	if err := biz.store.Update(ctx, condition, bson.M{
+		"$set": update,
+	}); err != nil {
 		biz.logger.WithSrc().Errorln(err)
 		return appCommon.ErrCannotUpdateEntity(postmodel.EntityName, err)
 	}

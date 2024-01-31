@@ -17,6 +17,7 @@ func (s *mongodbStore) Update(ctx context.Context, conditions interface{}, data 
 		return appCommon.ErrInternal(err)
 	}
 	if updateData["$set"] != nil {
+
 		updateData["$set"].(bson.M)["updated_at"] = time.Now()
 	} else {
 		updateData["$set"] = bson.M{

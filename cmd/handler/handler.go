@@ -30,6 +30,7 @@ func MainRoute(router *gin.Engine, sc goservice.ServiceContext) {
 	}
 	authedRoutes.GET("/post", postgin.List(sc))
 	authedRoutes.GET("/post/:id", postgin.Find(sc))
+
 	image := authedRoutes.Group("image", middleware.AdminAuthorization())
 	{
 		image.POST("/", imagegin.UploadByFile(sc))
