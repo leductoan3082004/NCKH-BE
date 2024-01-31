@@ -48,6 +48,9 @@ type PostList struct {
 	Category *string `json:"category" form:"category"`
 	Content  *string `json:"content" form:"content"`
 }
+type PostFind struct {
+	PostId string `json:"post_id" binding:"required"`
+}
 
 func (Post) TableName() string {
 	return "post"

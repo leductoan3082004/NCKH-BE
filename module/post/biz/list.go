@@ -9,7 +9,7 @@ import (
 )
 
 type PostListStore interface {
-	ListDataWithCondition(ctx context.Context, condition bson.M, paging *appCommon.Paging, moreInfo ...string) ([]postmodel.Post, error)
+	ListDataWithCondition(ctx context.Context, condition bson.M, paging *appCommon.Paging, moreInfo ...string) ([]postmodel.SimplePost, error)
 }
 
 type PostListBiz struct {
@@ -21,7 +21,7 @@ func NewPostListBiz(store PostListStore) *PostListBiz {
 	return &PostListBiz{store: store, logger: logger.GetCurrent().GetLogger("PostListBiz")}
 }
 
-func (biz *PostListBiz) ListDataWithCondition(ctx context.Context, paging *appCommon.Paging, filter *postmodel.PostList) ([]postmodel.Post, error) {
+func (biz *PostListBiz) ListDataWithCondition(ctx context.Context, paging *appCommon.Paging, filter *postmodel.PostList) ([]postmodel.SimplePost, error) {
 	paging.Fulfill()
 
 	condition := bson.M{}
@@ -40,9 +40,12 @@ func (biz *PostListBiz) ListDataWithCondition(ctx context.Context, paging *appCo
 	res, err := biz.store.ListDataWithCondition(ctx, condition, paging)
 	if err != nil {
 		biz.logger.WithSrc().Errorln(err)
-		return []postmodel.Post{}, appCommon.ErrCannotListEntity(postmodel.EntityName, err)
+		return []postmodel.SimplePost{}, appCommon.ErrCannotListEntity(postmodel.EntityName, err)
 	}
 
+	if res == nil {
+		return []postmodel.SimplePost{}, nil
+	}
 	if len(res) > 0 {
 		paging.NextCursor = res[len(res)-1].Id.Hex()
 	}

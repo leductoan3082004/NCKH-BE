@@ -9,7 +9,7 @@ import (
 	postmodel "nckh-BE/module/post/model"
 )
 
-func (s *mongodbStore) ListDataWithCondition(ctx context.Context, condition bson.M, paging *appCommon.Paging, moreInfo ...string) ([]postmodel.Post, error) {
+func (s *mongodbStore) ListDataWithCondition(ctx context.Context, condition bson.M, paging *appCommon.Paging, moreInfo ...string) ([]postmodel.SimplePost, error) {
 	collection := s.db.Database(appCommon.MainDBName).Collection(postmodel.Post{}.TableName())
 
 	opts := options.Find()
@@ -45,7 +45,7 @@ func (s *mongodbStore) ListDataWithCondition(ctx context.Context, condition bson
 		return nil, appCommon.ErrDB(err)
 	}
 	paging.Total = count
-	var res []postmodel.Post
+	var res []postmodel.SimplePost
 	if err = cursor.All(ctx, &res); err != nil {
 		return nil, appCommon.ErrDB(err)
 	}
