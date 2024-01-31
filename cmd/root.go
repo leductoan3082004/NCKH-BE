@@ -3,8 +3,13 @@ package cmd
 import (
 	"github.com/gin-gonic/gin"
 	goservice "github.com/lequocbinh04/go-sdk"
+	"github.com/lequocbinh04/go-sdk/plugin/aws"
+	"github.com/lequocbinh04/go-sdk/plugin/storage/sdkmgo"
 	"github.com/spf13/cobra"
-	"net/http"
+	"nckh-BE/appCommon"
+	"nckh-BE/cmd/handler"
+	"nckh-BE/plugin/appredis"
+	jwtProvider "nckh-BE/plugin/tokenprovider/jwt"
 )
 
 func newService() goservice.Service {
@@ -12,6 +17,10 @@ func newService() goservice.Service {
 	service := goservice.New(
 		goservice.WithName("mindzone"),
 		goservice.WithVersion("1.0.0"),
+		goservice.WithInitRunnable(sdkmgo.NewMongoDB("mongodb", appCommon.DBMain)),
+		goservice.WithInitRunnable(appredis.NewRedisDB("redis", appCommon.PluginRedis)),
+		goservice.WithInitRunnable(jwtProvider.NewJwtProvider("jwt", appCommon.PluginJWT)),
+		goservice.WithInitRunnable(aws.New("aws", appCommon.PluginAWS)),
 	)
 
 	if err := service.Init(); err != nil {
@@ -27,11 +36,7 @@ var rootCmd = &cobra.Command{
 		service := newService()
 
 		service.HTTPServer().AddHandler(func(engine *gin.Engine) {
-			engine.GET("/health", func(c *gin.Context) {
-				c.JSON(http.StatusOK, gin.H{
-					"status": "ok",
-				})
-			})
+			handler.MainRoute(engine, service)
 		})
 
 		if err := service.Start(func() {}); err != nil {
