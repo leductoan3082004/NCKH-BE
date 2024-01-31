@@ -21,9 +21,18 @@ func NewPostListBiz(store PostListStore) *PostListBiz {
 	return &PostListBiz{store: store, logger: logger.GetCurrent().GetLogger("PostListBiz")}
 }
 
-func (biz *PostListBiz) ListDataWithCondition(ctx context.Context, paging *appCommon.Paging, moreInfo ...string) ([]postmodel.Post, error) {
+func (biz *PostListBiz) ListDataWithCondition(ctx context.Context, paging *appCommon.Paging, filter *postmodel.PostList) ([]postmodel.Post, error) {
 	paging.Fulfill()
-	res, err := biz.store.ListDataWithCondition(ctx, nil, paging, moreInfo...)
+
+	condition := bson.M{}
+
+	if filter.Tag != nil {
+		condition["tag"] = *filter.Tag
+	}
+	if filter.Category != nil {
+		condition["category"] = *filter.Category
+	}
+	res, err := biz.store.ListDataWithCondition(ctx, condition, paging)
 	if err != nil {
 		biz.logger.WithSrc().Errorln(err)
 		return []postmodel.Post{}, appCommon.ErrCannotListEntity(postmodel.EntityName, err)

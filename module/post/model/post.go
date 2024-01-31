@@ -16,7 +16,11 @@ type Post struct {
 	MetaData            `json:",inline" bson:",inline"`
 	Content             string `json:"content" bson:"content"`
 	Author              string `json:"author" bson:"author"`
-	Type                string `json:"type" bson:"type"`
+}
+
+type SimplePost struct {
+	appCommon.MgDBModel `json:",inline" bson:",inline"`
+	MetaData            `json:",inline" bson:",inline"`
 }
 
 type PostCreate struct {
@@ -24,7 +28,6 @@ type PostCreate struct {
 	Title    string   `json:"title" binding:"required"`
 	Content  string   `json:"content" binding:"required"`
 	Author   string   `json:"author" binding:"required"`
-	Type     string   `json:"type" binding:"required"`
 	Tag      []string `json:"tag" bson:"tag"`
 	Category []string `json:"category" bson:"category"`
 }
@@ -33,13 +36,16 @@ type PostUpdate struct {
 	Title    *string   `json:"title"`
 	Content  *string   `json:"content"`
 	Author   *string   `json:"author"`
-	Type     *string   `json:"type"`
 	ImageUrl *string   `json:"image_url"`
 	Tag      *[]string `json:"tag" bson:"tag"`
 	Category *[]string `json:"category" bson:"category"`
 }
 type PostDelete struct {
 	PostId string `json:"post_id" binding:"required"`
+}
+type PostList struct {
+	Tag      *string `json:"tag" form:"tag"`
+	Category *string `json:"category" form:"category"`
 }
 
 func (Post) TableName() string {

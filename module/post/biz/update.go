@@ -41,9 +41,6 @@ func (biz *updateBiz) Update(ctx context.Context, data *postmodel.PostUpdate) er
 	if data.Content != nil {
 		update["content"] = *data.Content
 	}
-	if data.Type != nil {
-		update["type"] = *data.Type
-	}
 	if data.ImageUrl != nil {
 		update["image_url"] = *data.ImageUrl
 	}
