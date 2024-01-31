@@ -32,6 +32,11 @@ func (biz *PostListBiz) ListDataWithCondition(ctx context.Context, paging *appCo
 	if filter.Category != nil {
 		condition["category"] = *filter.Category
 	}
+	if filter.Content != nil {
+		condition["$text"] = bson.M{
+			"$search": *filter.Content,
+		}
+	}
 	res, err := biz.store.ListDataWithCondition(ctx, condition, paging)
 	if err != nil {
 		biz.logger.WithSrc().Errorln(err)

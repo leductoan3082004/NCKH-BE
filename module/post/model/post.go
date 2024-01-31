@@ -46,6 +46,7 @@ type PostDelete struct {
 type PostList struct {
 	Tag      *string `json:"tag" form:"tag"`
 	Category *string `json:"category" form:"category"`
+	Content  *string `json:"content" form:"content"`
 }
 
 func (Post) TableName() string {
