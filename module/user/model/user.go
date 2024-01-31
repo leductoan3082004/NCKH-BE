@@ -9,7 +9,7 @@ import (
 const EntityName = "User"
 
 type User struct {
-	appCommon.MgDBModel `json:",inline"`
+	appCommon.MgDBModel `json:",inline" bson:",inline"`
 	Username            string `json:"username" bson:"username"`
 	Password            string `json:"password" bson:"password"`
 	Salt                string `json:"salt" bson:"salt"`

@@ -29,18 +29,19 @@ func NewUploadBiz(store uploadStore, s3 aws.S3) *uploadBiz {
 	}
 }
 
-func (biz *uploadBiz) UploadImage(ctx context.Context, data []byte, path, fileName string) (string, error) {
+func (biz *uploadBiz) UploadImage(ctx context.Context, data []byte, path, fileName string) (*imagemodel.Image, error) {
 	fileExt := filepath.Ext(fileName) // "img.jpg" => ".jpg"
 	if fileExt != ".png" && fileExt != ".jpg" && fileExt != ".jpeg" {
-		return "", imagemodel.ErrInvalidImageFormat
+		return nil, imagemodel.ErrInvalidImageFormat
 	}
 	fileName = fmt.Sprintf("%d%s", time.Now().Nanosecond(), fileExt) // 9129324893248.jpg
 	_, err := biz.s3.UploadFileData(ctx, data, appCommon.Join("/", path, fileName))
 	if err != nil {
 		biz.logger.WithSrc().Errorln(err)
-		return "", imagemodel.ErrCannotUploadImage(err)
+		return nil, imagemodel.ErrCannotUploadImage(err)
 	}
-	if err := biz.store.Create(ctx, &imagemodel.Image{
+
+	res := &imagemodel.Image{
 		MgDBModel: appCommon.MgDBModel{
 			Id:        primitive.ObjectID{},
 			Status:    0,
@@ -48,9 +49,10 @@ func (biz *uploadBiz) UploadImage(ctx context.Context, data []byte, path, fileNa
 			UpdatedAt: time.Now(),
 		},
 		Url: appCommon.Join("/", appCommon.S3Domain, path, fileName),
-	}); err != nil {
-		biz.logger.WithSrc().Errorln(err)
-		return "", appCommon.ErrCannotCreateEntity(imagemodel.EntityName, err)
 	}
-	return fileName, nil
+	if err := biz.store.Create(ctx, res); err != nil {
+		biz.logger.WithSrc().Errorln(err)
+		return nil, appCommon.ErrCannotCreateEntity(imagemodel.EntityName, err)
+	}
+	return res, nil
 }

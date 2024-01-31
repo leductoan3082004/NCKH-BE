@@ -25,7 +25,10 @@ func NewCreateBiz(store createStore) *createBiz {
 
 func (biz *createBiz) Create(ctx context.Context, data *postmodel.PostCreate) (*postmodel.Post, error) {
 	createData := &postmodel.Post{
-		Title:   data.Title,
+		MetaData: postmodel.MetaData{
+			Title:    data.Title,
+			ImageUrl: data.ImageUrl,
+		},
 		Content: data.Content,
 		Author:  data.Author,
 		Type:    data.Type,

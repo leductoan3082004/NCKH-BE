@@ -2,6 +2,7 @@ package userbiz
 
 import (
 	"context"
+	"fmt"
 	"github.com/globalsign/mgo/bson"
 	"github.com/lequocbinh04/go-sdk/logger"
 	"nckh-BE/appCommon"
@@ -53,6 +54,7 @@ func (biz *userLoginBiz) Login(ctx context.Context, data *usermodel.UserLogin) (
 		Role:      "user",
 		SessionID: sessionId,
 	}
+	fmt.Println(user.Id.Hex())
 
 	token, err := biz.tokenProvider.Generate(payload, appCommon.ExpiryAccessToken)
 	if err != nil {
