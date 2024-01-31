@@ -28,6 +28,8 @@ func (biz *createBiz) Create(ctx context.Context, data *postmodel.PostCreate) (*
 		MetaData: postmodel.MetaData{
 			Title:    data.Title,
 			ImageUrl: data.ImageUrl,
+			Tag:      data.Tag,
+			Category: data.Category,
 		},
 		Content: data.Content,
 		Author:  data.Author,

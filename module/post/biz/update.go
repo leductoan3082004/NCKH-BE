@@ -47,6 +47,13 @@ func (biz *updateBiz) Update(ctx context.Context, data *postmodel.PostUpdate) er
 	if data.ImageUrl != nil {
 		update["image_url"] = *data.ImageUrl
 	}
+	if data.Tag != nil {
+		update["tag"] = *data.Tag
+	}
+	if data.Category != nil {
+		update["category"] = *data.Category
+	}
+
 	condition := bson.M{
 		"_id": postId,
 	}

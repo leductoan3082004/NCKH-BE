@@ -5,8 +5,10 @@ import "nckh-BE/appCommon"
 const EntityName = "Post"
 
 type MetaData struct {
-	Title    string `json:"title" bson:"title"`
-	ImageUrl string `json:"image_url" bson:"image_url"`
+	Title    string   `json:"title" bson:"title"`
+	ImageUrl string   `json:"image_url" bson:"image_url"`
+	Tag      []string `json:"tag" bson:"tag"`
+	Category []string `json:"category" bson:"category"`
 }
 
 type Post struct {
@@ -18,19 +20,23 @@ type Post struct {
 }
 
 type PostCreate struct {
-	ImageUrl string `json:"image_url"`
-	Title    string `json:"title" binding:"required"`
-	Content  string `json:"content" binding:"required"`
-	Author   string `json:"author" binding:"required"`
-	Type     string `json:"type" binding:"required"`
+	ImageUrl string   `json:"image_url"`
+	Title    string   `json:"title" binding:"required"`
+	Content  string   `json:"content" binding:"required"`
+	Author   string   `json:"author" binding:"required"`
+	Type     string   `json:"type" binding:"required"`
+	Tag      []string `json:"tag" bson:"tag"`
+	Category []string `json:"category" bson:"category"`
 }
 type PostUpdate struct {
-	PostId   string  `json:"post_id" binding:"required"`
-	Title    *string `json:"title"`
-	Content  *string `json:"content"`
-	Author   *string `json:"author"`
-	Type     *string `json:"type"`
-	ImageUrl *string `json:"image_url"`
+	PostId   string    `json:"post_id" binding:"required"`
+	Title    *string   `json:"title"`
+	Content  *string   `json:"content"`
+	Author   *string   `json:"author"`
+	Type     *string   `json:"type"`
+	ImageUrl *string   `json:"image_url"`
+	Tag      *[]string `json:"tag" bson:"tag"`
+	Category *[]string `json:"category" bson:"category"`
 }
 type PostDelete struct {
 	PostId string `json:"post_id" binding:"required"`
