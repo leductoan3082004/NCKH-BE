@@ -20,6 +20,7 @@ func MainRoute(router *gin.Engine, sc goservice.ServiceContext) {
 	router.POST("v1/register", usergin.Register(sc))
 	router.POST("v1/login", usergin.Login(sc))
 
+	v1 := router.Group("/v1")
 	authedRoutes := router.Group("v1", middleware.RequiredAuth(sc))
 
 	post := authedRoutes.Group("/post", middleware.AdminAuthorization())
@@ -28,8 +29,8 @@ func MainRoute(router *gin.Engine, sc goservice.ServiceContext) {
 		post.PUT("/", postgin.Update(sc))
 		post.DELETE("/", postgin.Delete(sc))
 	}
-	authedRoutes.GET("/post", postgin.List(sc))
-	authedRoutes.GET("/post/:id", postgin.Find(sc))
+	v1.GET("/post", postgin.List(sc))
+	v1.GET("/post/:id", postgin.Find(sc))
 
 	image := authedRoutes.Group("image", middleware.AdminAuthorization())
 	{

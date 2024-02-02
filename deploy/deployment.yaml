@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: backend
+  name: nckh-backend
+  labels:
+    component: nckh-backend
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      component: nckh-backend
+  template:
+    metadata:
+      labels:
+        component: nckh-backend
+    spec:
+      restartPolicy: Always
+      containers:
+        - name: nckh-backend
+          image: toan3082004/nckh:latest
+          ports:
+            - containerPort: 3000
+          imagePullPolicy: Always
+          envFrom:
+            - configMapRef:
+                name: backend-nckh-env
+      imagePullSecrets:
+        - name: docker
