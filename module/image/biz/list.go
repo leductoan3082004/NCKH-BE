@@ -2,10 +2,12 @@ package imagebiz
 
 import (
 	"context"
+	"fmt"
 	"github.com/lequocbinh04/go-sdk/logger"
 	"go.mongodb.org/mongo-driver/bson"
 	"nckh-BE/appCommon"
 	imagemodel "nckh-BE/module/image/model"
+	"time"
 )
 
 type listStore interface {
@@ -23,9 +25,22 @@ func NewListBiz(store listStore) *listBiz {
 	}
 }
 
-func (biz *listBiz) ListDataWithCondition(ctx context.Context, paging *appCommon.Paging, moreInfo ...string) ([]imagemodel.Image, error) {
+func (biz *listBiz) ListDataWithCondition(ctx context.Context, filter *imagemodel.ImageList, paging *appCommon.Paging, moreInfo ...string) ([]imagemodel.Image, error) {
+	filter.FulFill()
 	paging.Fulfill()
-	result, err := biz.store.ListDataWithCondition(ctx, nil, paging, moreInfo...)
+
+	timeFrom := time.Unix(*filter.TimeFrom, 0)
+	timeTo := time.Unix(*filter.TimeTo, 0)
+
+	fmt.Println(timeFrom, timeTo)
+
+	conditions := bson.M{
+		"created_at": bson.M{
+			"$gte": timeFrom,
+			"$lte": timeTo,
+		},
+	}
+	result, err := biz.store.ListDataWithCondition(ctx, conditions, paging, moreInfo...)
 	if err != nil {
 		biz.logger.WithSrc().Errorln(err)
 		return []imagemodel.Image{}, appCommon.ErrCannotListEntity(imagemodel.EntityName, err)
