@@ -1,6 +1,9 @@
 package imagemodel
 
-import "nckh-BE/appCommon"
+import (
+	"nckh-BE/appCommon"
+	"time"
+)
 
 const EntityName = "Image"
 
@@ -10,6 +13,21 @@ type Image struct {
 }
 type ImageDelete struct {
 	ImageId string `json:"image_id" binding:"required"`
+}
+type ImageList struct {
+	TimeFrom *int64 `form:"time_from"`
+	TimeTo   *int64 `form:"time_to"`
+}
+
+func (s *ImageList) FulFill() {
+	if s.TimeTo == nil {
+		s.TimeTo = new(int64)
+		*s.TimeTo = time.Now().Unix()
+	}
+	if s.TimeFrom == nil {
+		s.TimeFrom = new(int64)
+		*s.TimeFrom = 0
+	}
 }
 
 func (Image) TableName() string {
