@@ -49,5 +49,9 @@ func (s *mongodbStore) ListDataWithCondition(ctx context.Context, condition bson
 	if err = cursor.All(ctx, &res); err != nil {
 		return nil, appCommon.ErrDB(err)
 	}
+
+	if res == nil {
+		return []postmodel.SimplePost{}, nil
+	}
 	return res, nil
 }
