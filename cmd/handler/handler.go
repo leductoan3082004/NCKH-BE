@@ -43,5 +43,11 @@ func MainRoute(router *gin.Engine, sc goservice.ServiceContext) {
 	feedback := v1.Group("/feedback")
 	{
 		feedback.POST("/", feedbackgin.Create(sc))
+		feedback.GET(
+			"/",
+			middleware.RequiredAuth(sc),
+			middleware.AdminAuthorization(),
+			feedbackgin.List(sc),
+		)
 	}
 }
