@@ -28,3 +28,7 @@ type FeedbackCreate struct {
 type FeedbackDelete struct {
 	FeedbackIds []string `json:"feedback_ids" binding:"required"`
 }
+
+type FeedbackFind struct {
+	FeedbackId string `json:"feedback_id" binding:"required"`
+}
