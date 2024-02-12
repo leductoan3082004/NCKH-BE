@@ -49,5 +49,11 @@ func MainRoute(router *gin.Engine, sc goservice.ServiceContext) {
 			middleware.AdminAuthorization(),
 			feedbackgin.List(sc),
 		)
+		feedback.DELETE(
+			"/",
+			middleware.RequiredAuth(sc),
+			middleware.AdminAuthorization(),
+			feedbackgin.Delete(sc),
+		)
 	}
 }

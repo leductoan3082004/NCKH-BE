@@ -24,3 +24,7 @@ type FeedbackCreate struct {
 	Phone   string `json:"phone" binding:"numeric,min=9,max=20"`
 	Name    string `json:"name" binding:"required,min=1,max=100"`
 }
+
+type FeedbackDelete struct {
+	FeedbackIds []string `json:"feedback_ids" binding:"required"`
+}
