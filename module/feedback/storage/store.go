@@ -1,4 +1,4 @@
-package poststorage
+package feedbackstorage
 
 import (
 	"go.mongodb.org/mongo-driver/mongo"

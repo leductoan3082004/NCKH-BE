@@ -4,6 +4,7 @@ import (
 	"github.com/gin-gonic/gin"
 	goservice "github.com/lequocbinh04/go-sdk"
 	"nckh-BE/middleware"
+	feedbackgin "nckh-BE/module/feedback/transport/gin"
 	imagegin "nckh-BE/module/image/transport/gin"
 	postgin "nckh-BE/module/post/transport/gin"
 	usergin "nckh-BE/module/user/transport/gin"
@@ -39,4 +40,8 @@ func MainRoute(router *gin.Engine, sc goservice.ServiceContext) {
 		image.GET("/", imagegin.List(sc))
 	}
 
+	feedback := v1.Group("/feedback")
+	{
+		feedback.POST("/", feedbackgin.Create(sc))
+	}
 }

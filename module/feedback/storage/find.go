@@ -1,4 +1,4 @@
-package poststorage
+package feedbackstorage
 
 import (
 	"context"
