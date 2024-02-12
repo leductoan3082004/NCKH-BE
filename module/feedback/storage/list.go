@@ -1,4 +1,4 @@
-package poststorage
+package feedbackstorage
 
 import (
 	"context"
@@ -6,11 +6,11 @@ import (
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo/options"
 	"nckh-BE/appCommon"
-	postmodel "nckh-BE/module/post/model"
+	feedbackmodel "nckh-BE/module/feedback/model"
 )
 
-func (s *mongodbStore) ListDataWithCondition(ctx context.Context, condition bson.M, paging *appCommon.Paging, moreInfo ...string) ([]postmodel.SimplePost, error) {
-	collection := s.db.Database(appCommon.MainDBName).Collection(postmodel.Post{}.TableName())
+func (s *mongodbStore) ListDataWithCondition(ctx context.Context, condition bson.M, paging *appCommon.Paging, moreInfo ...string) ([]feedbackmodel.Feedback, error) {
+	collection := s.db.Database(appCommon.MainDBName).Collection(feedbackmodel.Feedback{}.TableName())
 
 	opts := options.Find()
 	if paging == nil {
@@ -45,13 +45,13 @@ func (s *mongodbStore) ListDataWithCondition(ctx context.Context, condition bson
 		return nil, appCommon.ErrDB(err)
 	}
 	paging.Total = count
-	var res []postmodel.SimplePost
+	var res []feedbackmodel.Feedback
 	if err = cursor.All(ctx, &res); err != nil {
 		return nil, appCommon.ErrDB(err)
 	}
 
 	if res == nil {
-		return []postmodel.SimplePost{}, nil
+		return []feedbackmodel.Feedback{}, nil
 	}
 	return res, nil
 }

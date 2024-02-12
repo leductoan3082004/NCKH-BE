@@ -49,5 +49,9 @@ func (s *sqlStore) ListDataWithCondition(ctx context.Context, condition bson.M, 
 	if err = cursor.All(ctx, &res); err != nil {
 		return nil, appCommon.ErrDB(err)
 	}
+
+	if res == nil {
+		return []imagemodel.Image{}, nil
+	}
 	return res, nil
 }
