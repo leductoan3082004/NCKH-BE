@@ -22,10 +22,15 @@ func NewFeedbackListBiz(store feedBackListStore) *feedbackListBiz {
 }
 
 func (biz *feedbackListBiz) List(ctx context.Context, paging *appCommon.Paging) ([]feedbackmodel.Feedback, error) {
-	res, err := biz.store.ListDataWithCondition(ctx, nil, paging)
+	paging.Fulfill()
+	res, err := biz.store.ListDataWithCondition(ctx, bson.M{}, paging)
 	if err != nil {
 		biz.logger.Errorln("Failed to list feedback", err)
 		return []feedbackmodel.Feedback{}, appCommon.ErrCannotListEntity(feedbackmodel.EntityName, err)
+	}
+
+	if len(res) > 0 {
+		paging.NextCursor = res[len(res)-1].Id.Hex()
 	}
 	return res, nil
 }

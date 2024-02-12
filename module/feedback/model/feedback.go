@@ -21,7 +21,7 @@ type FeedbackCreate struct {
 	Content string `json:"content" binding:"required"`
 	Topic   string `json:"topic" binding:"required"`
 	Email   string `json:"email" binding:"required,email"`
-	Phone   string `json:"phone" binding:"numeric,min=9,max=20"`
+	Phone   string `json:"phone" binding:"omitempty,numeric,max=20"`
 	Name    string `json:"name" binding:"required,min=1,max=100"`
 }
 
