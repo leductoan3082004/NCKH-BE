@@ -52,6 +52,12 @@ type PostFind struct {
 	PostId string `json:"post_id" binding:"required"`
 }
 
+type PostSimilarList struct {
+	PostId string `form:"post_id" binding:"required"`
+	Type   string `form:"type" binding:"required"`
+	Limit  int    `form:"limit" binding:"required"`
+}
+
 func (Post) TableName() string {
 	return "post"
 }
