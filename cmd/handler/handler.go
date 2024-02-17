@@ -32,6 +32,7 @@ func MainRoute(router *gin.Engine, sc goservice.ServiceContext) {
 	}
 	v1.GET("/post", postgin.List(sc))
 	v1.GET("/post/:id", postgin.Find(sc))
+	v1.GET("/post/suggestion", postgin.ListRandom(sc))
 
 	image := authedRoutes.Group("image", middleware.AdminAuthorization())
 	{
