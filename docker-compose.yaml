@@ -1,0 +1,17 @@
+networks:
+  my-net:
+    name: my-net
+    external: true
+services:
+  nckh:
+    image: toan3082004/nckh:latest
+    ports:
+      - 3000
+    networks:
+      - my-net
+    env_file:
+      - .env
+    deploy:
+      replicas: 3
+      restart_policy:
+        condition: on-failure
