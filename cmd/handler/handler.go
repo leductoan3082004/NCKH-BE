@@ -14,7 +14,7 @@ func MainRoute(router *gin.Engine, sc goservice.ServiceContext) {
 	router.Use(middleware.AllowCORS())
 	router.GET("/ping", func(c *gin.Context) {
 		c.JSON(200, gin.H{
-			"status": "pong",
+			"ping": "pong",
 		})
 	})
 	router.Use(middleware.Recover())

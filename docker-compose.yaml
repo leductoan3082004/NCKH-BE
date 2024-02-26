@@ -12,6 +12,6 @@ services:
     env_file:
       - .env
     deploy:
-      replicas: 3
+      replicas: 8
       restart_policy:
         condition: on-failure
