@@ -1,4 +1,4 @@
-package userrpc
+package userrpcclient
 
 import (
 	"nckh-BE/proto/user"

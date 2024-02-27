@@ -5,11 +5,11 @@ import (
 	"github.com/gin-gonic/gin"
 	goservice "github.com/lequocbinh04/go-sdk"
 	"github.com/lequocbinh04/go-sdk/sdkcm"
-	"go.mongodb.org/mongo-driver/mongo"
 	"nckh-BE/appCommon"
 	userbiz "nckh-BE/module/user/biz"
-	userstorage "nckh-BE/module/user/storage"
+	userrpcclient "nckh-BE/module/user/storage/rpc"
 	"nckh-BE/plugin/tokenprovider"
+	userproto "nckh-BE/proto/user"
 	"net/http"
 	"strings"
 )
@@ -47,7 +47,9 @@ func RequiredAuth(sc goservice.ServiceContext) func(c *gin.Context) {
 			panic(err)
 		}
 
-		userBiz := userbiz.NewFindBiz(userstorage.NewMgDBStore(sc.MustGet(appCommon.DBMain).(*mongo.Client)))
+		rpc := sc.MustGet(appCommon.PluginUserClient).(userproto.UserServiceClient)
+		rpcStore := userrpcclient.NewRpcStore(rpc)
+		userBiz := userbiz.NewFindBiz(rpcStore)
 
 		user, err := userBiz.Find(c.Request.Context(), payload.UserId)
 
