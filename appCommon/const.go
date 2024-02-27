@@ -12,6 +12,7 @@ const (
 	PluginJWT        = "jwt"
 	PluginAWS        = "aws"
 	PluginUserClient = "user-client"
+	PluginUserServer = "user-server"
 )
 
 const (

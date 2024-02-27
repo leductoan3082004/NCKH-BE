@@ -1,17 +1,28 @@
 package userplugin
 
-import "flag"
+import (
+	"flag"
+	"fmt"
+	"github.com/lequocbinh04/go-sdk/logger"
+	"google.golang.org/grpc"
+	userproto "nckh-BE/proto/user"
+	"net"
+)
 
 type userGrpcServer struct {
-	url    string
-	prefix string
-	name   string
+	port     string
+	prefix   string
+	name     string
+	server   *grpc.Server
+	logger   logger.Logger
+	handlers []userproto.UserServiceServer
 }
 
-func NewUserGrpcServer(name string, prefix string) *userGrpcServer {
+func NewUserGrpcServer(name string, prefix string, handlers ...userproto.UserServiceServer) *userGrpcServer {
 	return &userGrpcServer{
-		prefix: prefix,
-		name:   name,
+		prefix:   prefix,
+		name:     name,
+		handlers: handlers,
 	}
 }
 
@@ -20,8 +31,7 @@ func (t *userGrpcServer) GetPrefix() string {
 }
 
 func (t *userGrpcServer) Get() interface{} {
-	//TODO implement me
-	panic("implement me")
+	return t
 }
 
 func (t *userGrpcServer) Name() string {
@@ -29,12 +39,32 @@ func (t *userGrpcServer) Name() string {
 }
 
 func (t *userGrpcServer) InitFlags() {
-	flag.StringVar(&t.url, t.prefix+"-url", "0.0.0.0:50051", "User gRPC url")
+	flag.StringVar(&t.port, t.prefix+"-port", "50051", "User gRPC server serving port")
 }
 
 func (t *userGrpcServer) Configure() error {
-	//TODO implement me
-	panic("implement me")
+	t.logger = logger.GetCurrent().GetLogger(t.name)
+
+	lis, err := net.Listen("tcp", fmt.Sprintf(":%s", t.port))
+
+	if err != nil {
+		t.logger.Fatalln(err)
+	}
+
+	t.logger.Infoln(fmt.Sprintf("GRPC Server is listening on %s ...\n", t.port))
+	t.server = grpc.NewServer()
+
+	for i := range t.handlers {
+		userproto.RegisterUserServiceServer(t.server, t.handlers[i])
+	}
+
+	go func() {
+		if err := t.server.Serve(lis); err != nil {
+			t.logger.Fatalln(err)
+		}
+	}()
+
+	return nil
 }
 
 func (t *userGrpcServer) Run() error {
