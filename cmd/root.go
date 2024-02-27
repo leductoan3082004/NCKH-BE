@@ -8,7 +8,7 @@ import (
 	"github.com/spf13/cobra"
 	"nckh-BE/appCommon"
 	"nckh-BE/cmd/handler"
-	usercomposer "nckh-BE/grpc/user"
+	userrpctransport "nckh-BE/module/user/transport/rpc"
 	"nckh-BE/plugin/appredis"
 	usergrpcclient "nckh-BE/plugin/remotecall/grpc"
 	jwtProvider "nckh-BE/plugin/tokenprovider/jwt"
@@ -32,15 +32,18 @@ func newService() goservice.Service {
 	service.Add(goservice.WithInitRunnable(usergrpcclient.NewUserGrpcServer(
 		"user-server",
 		appCommon.PluginUserServer,
-		usercomposer.GetUserByIdServer(service),
+		userrpctransport.GetUserByIdServer(service),
 	)))
 
-	service.Add(goservice.WithInitRunnable(usergrpcclient.NewUserGRPC(
-		"user-client",
-		appCommon.PluginUserClient,
-	)))
+	//service.Add(goservice.WithInitRunnable(usergrpcclient.NewUserGRPC(
+	//	"user-client",
+	//	appCommon.PluginUserClient,
+	//)))
 
-	if err := service.InitPrefix(appCommon.PluginUserServer, appCommon.PluginUserClient); err != nil {
+	if err := service.InitPrefix(
+		appCommon.PluginUserServer,
+		//appCommon.PluginUserClient,
+	); err != nil {
 		panic(err)
 	}
 	return service
@@ -48,7 +51,7 @@ func newService() goservice.Service {
 
 var rootCmd = &cobra.Command{
 	Use:   "app",
-	Short: "Start a mindzone service",
+	Short: "Start a backend service",
 	Run: func(cmd *cobra.Command, args []string) {
 		service := newService()
 

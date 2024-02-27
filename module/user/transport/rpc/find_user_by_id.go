@@ -2,9 +2,13 @@ package userrpctransport
 
 import (
 	"context"
+	goservice "github.com/lequocbinh04/go-sdk"
 	"github.com/lequocbinh04/go-sdk/logger"
+	"go.mongodb.org/mongo-driver/mongo"
 	"google.golang.org/protobuf/types/known/timestamppb"
+	"nckh-BE/appCommon"
 	usermodel "nckh-BE/module/user/model"
+	userstorage "nckh-BE/module/user/storage"
 	userproto "nckh-BE/proto/user"
 )
 
@@ -16,7 +20,7 @@ type userFindByIdBiz struct {
 	logger logger.Logger
 }
 
-func NewUserFindByIdBiz(store userFindByIdStore) *userFindByIdBiz {
+func newUserFindBiz(store userFindByIdStore) *userFindByIdBiz {
 	return &userFindByIdBiz{
 		store:  store,
 		logger: logger.GetCurrent().GetLogger("UserFindByIdBizGRPC"),
@@ -26,6 +30,7 @@ func NewUserFindByIdBiz(store userFindByIdStore) *userFindByIdBiz {
 func (s *userFindByIdBiz) GetUser(ctx context.Context, request *userproto.UserRequest) (*userproto.UserResponse, error) {
 	user, err := s.store.GetUser(ctx, request.Id)
 	if err != nil {
+		s.logger.WithSrc().Error(err)
 		return nil, err
 	}
 	return &userproto.UserResponse{
@@ -36,4 +41,11 @@ func (s *userFindByIdBiz) GetUser(ctx context.Context, request *userproto.UserRe
 		CreatedAt: timestamppb.New(user.CreatedAt),
 		UpdatedAt: timestamppb.New(user.UpdatedAt),
 	}, nil
+}
+
+func GetUserByIdServer(sc goservice.ServiceContext) userproto.UserServiceServer {
+	db := sc.MustGet(appCommon.DBMain).(*mongo.Client)
+	dbStore := userstorage.NewMgDBStore(db)
+	userBiz := newUserFindBiz(dbStore)
+	return userBiz
 }
