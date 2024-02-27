@@ -1,4 +1,4 @@
-package usergrpcclient
+package userplugin
 
 import (
 	"flag"
