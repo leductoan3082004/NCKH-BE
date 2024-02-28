@@ -28,6 +28,7 @@ func newUserFindBiz(store userFindByIdStore) *userFindByIdBiz {
 }
 
 func (s *userFindByIdBiz) GetUser(ctx context.Context, request *userproto.UserRequest) (*userproto.UserResponse, error) {
+	s.logger.WithSrc().Infoln("calling grpc get user")
 	user, err := s.store.GetUser(ctx, request.Id)
 	if err != nil {
 		s.logger.WithSrc().Error(err)
