@@ -1,4 +1,4 @@
-APP_NAME=nckh
+APP_NAME=nckh-be-post
 ./deploy/remove.sh
 
 docker rmi ${APP_NAME}:latest
