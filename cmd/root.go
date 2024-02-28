@@ -8,7 +8,6 @@ import (
 	"github.com/spf13/cobra"
 	"nckh-BE/appCommon"
 	"nckh-BE/cmd/handler"
-	userrpctransport "nckh-BE/module/user/transport/rpc"
 	"nckh-BE/plugin/appredis"
 	usergrpcclient "nckh-BE/plugin/remotecall/grpc"
 	jwtProvider "nckh-BE/plugin/tokenprovider/jwt"
@@ -29,20 +28,13 @@ func newService() goservice.Service {
 		panic(err)
 	}
 
-	service.Add(goservice.WithInitRunnable(usergrpcclient.NewUserGrpcServer(
-		"user-server",
-		appCommon.PluginUserServer,
-		userrpctransport.GetUserByIdServer(service),
+	service.Add(goservice.WithInitRunnable(usergrpcclient.NewUserGRPC(
+		"user-client",
+		appCommon.PluginUserClient,
 	)))
 
-	//service.Add(goservice.WithInitRunnable(usergrpcclient.NewUserGRPC(
-	//	"user-client",
-	//	appCommon.PluginUserClient,
-	//)))
-
 	if err := service.InitPrefix(
-		appCommon.PluginUserServer,
-		//appCommon.PluginUserClient,
+		appCommon.PluginUserClient,
 	); err != nil {
 		panic(err)
 	}

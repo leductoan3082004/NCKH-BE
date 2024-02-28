@@ -3,6 +3,19 @@ networks:
     name: my-net
     external: true
 services:
+  nckh-user:
+    image: toan3082004/nckh-user-service:latest
+    ports:
+      - 50051
+    networks:
+        - my-net
+    env_file:
+      - .env
+    environment:
+      - LETSENCRYPT_HOST=nckh.hareta.online
+      - VIRTUAL_HOST=nckh.hareta.online
+      - VIRUTAL_PATH=/v1/user
+      - PORT=50051
   nckh:
     image: toan3082004/nckh:latest
     ports:
@@ -11,7 +24,12 @@ services:
       - my-net
     env_file:
       - .env
+    environment:
+      - LETSENCRYPT_HOST=nckh.hareta.online
+      - VIRTUAL_HOST=nckh.hareta.online
+      - VIRTUAL_PATH=/
+      - USER_CLIENT_URL=nckh-user:50051
     deploy:
-      replicas: 8
+      replicas: 3
       restart_policy:
         condition: on-failure

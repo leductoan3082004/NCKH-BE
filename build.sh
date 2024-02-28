@@ -1,4 +1,6 @@
-docker rmi nckh-user-service:latest
-docker build -t nckh-user-service:latest .
-docker tag nckh-user-service:latest toan3082004/nckh-user-service:latest
-docker push toan3082004/nckh-user-service:latest
+APP_NAME=nckh
+
+docker rmi ${APP_NAME}:latest
+docker build -t ${APP_NAME}:latest .
+docker tag ${APP_NAME}:latest toan3082004/${APP_NAME}:latest
+docker push toan3082004/${APP_NAME}:latest
