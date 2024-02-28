@@ -1,12 +1,10 @@
 package userplugin
 
 import (
-	"context"
 	"flag"
 	"github.com/lequocbinh04/go-sdk/logger"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
-	"nckh-BE/component/asyncjob"
 	userproto "nckh-BE/proto/user"
 )
 
@@ -45,21 +43,19 @@ func (r *userGRPC) Configure() error {
 	r.logger = logger.GetCurrent().GetLogger(r.name)
 	r.logger.WithSrc().Infoln("Connecting to %s", r.url)
 	opts := grpc.WithTransportCredentials(insecure.NewCredentials())
-	clientConn, err := grpc.Dial(r.url, opts)
+	clientConn, err := grpc.Dial(r.url, opts, grpc.WithBlock())
 
 	if err != nil {
 		r.logger.Fatalln(err)
 	}
+
 	r.logger.WithSrc().Infoln("Connected to %s", r.url)
 	r.client = userproto.NewUserServiceClient(clientConn)
 	return nil
 }
 
 func (r *userGRPC) Run() error {
-	job := asyncjob.NewJob(func(ctx context.Context) error {
-		return r.Configure()
-	})
-	return job.ExecuteWithRetry(context.Background())
+	return r.Configure()
 }
 
 func (r *userGRPC) Stop() <-chan bool {

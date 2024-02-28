@@ -14,7 +14,7 @@ services:
     environment:
       - LETSENCRYPT_HOST=nckh.hareta.online
       - VIRTUAL_HOST=nckh.hareta.online
-      - VIRUTAL_PATH=/v1/user
+      - VIRTUAL_PATH=/v1/user/
       - PORT=50051
   nckh:
     image: toan3082004/nckh:latest
@@ -28,7 +28,7 @@ services:
       - LETSENCRYPT_HOST=nckh.hareta.online
       - VIRTUAL_HOST=nckh.hareta.online
       - VIRTUAL_PATH=/
-      - USER_CLIENT_URL=nckh-user:50051
+      - USER_CLIENT_URL=nckh-be-nckh-user-1:50051
     deploy:
       replicas: 3
       restart_policy:

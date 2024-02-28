@@ -22,20 +22,13 @@ func newService() goservice.Service {
 		goservice.WithInitRunnable(appredis.NewRedisDB("redis", appCommon.PluginRedis)),
 		goservice.WithInitRunnable(jwtProvider.NewJwtProvider("jwt", appCommon.PluginJWT)),
 		goservice.WithInitRunnable(aws.New("aws", appCommon.PluginAWS)),
+		goservice.WithInitRunnable(usergrpcclient.NewUserGRPC(
+			"user-client",
+			appCommon.PluginUserClient,
+		)),
 	)
 
 	if err := service.Init(); err != nil {
-		panic(err)
-	}
-
-	service.Add(goservice.WithInitRunnable(usergrpcclient.NewUserGRPC(
-		"user-client",
-		appCommon.PluginUserClient,
-	)))
-
-	if err := service.InitPrefix(
-		appCommon.PluginUserClient,
-	); err != nil {
 		panic(err)
 	}
 	return service

@@ -1,4 +1,5 @@
 APP_NAME=nckh
+./deploy/remove.sh
 
 docker rmi ${APP_NAME}:latest
 docker build -t ${APP_NAME}:latest .
