@@ -7,10 +7,12 @@ type DbType int
 const (
 	MainDBName = "nckh"
 
-	DBMain      = "mongodb"
-	PluginRedis = "redis"
-	PluginJWT   = "jwt"
-	PluginAWS   = "aws"
+	DBMain           = "mongodb"
+	PluginRedis      = "redis"
+	PluginJWT        = "jwt"
+	PluginAWS        = "aws"
+	PluginUserClient = "user-client"
+	PluginUserServer = "user-server"
 )
 
 const (

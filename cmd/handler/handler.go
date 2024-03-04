@@ -14,12 +14,12 @@ func MainRoute(router *gin.Engine, sc goservice.ServiceContext) {
 	router.Use(middleware.AllowCORS())
 	router.GET("/ping", func(c *gin.Context) {
 		c.JSON(200, gin.H{
-			"status": "pong",
+			"ping": "pong",
 		})
 	})
 	router.Use(middleware.Recover())
-	router.POST("v1/register", usergin.Register(sc))
-	router.POST("v1/login", usergin.Login(sc))
+	router.POST("v1/user/register", usergin.Register(sc))
+	router.POST("v1/user/login", usergin.Login(sc))
 
 	v1 := router.Group("/v1")
 	authedRoutes := router.Group("v1", middleware.RequiredAuth(sc))

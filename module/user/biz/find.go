@@ -2,15 +2,13 @@ package userbiz
 
 import (
 	"context"
-	"github.com/globalsign/mgo/bson"
 	"github.com/lequocbinh04/go-sdk/logger"
-	"go.mongodb.org/mongo-driver/bson/primitive"
 	"nckh-BE/appCommon"
 	usermodel "nckh-BE/module/user/model"
 )
 
 type userFindStore interface {
-	Find(ctx context.Context, conditions interface{}, fields ...string) (*usermodel.User, error)
+	GetUser(ctx context.Context, userId string) (*usermodel.User, error)
 }
 
 type userFindBiz struct {
@@ -26,14 +24,7 @@ func NewFindBiz(store userFindStore) *userFindBiz {
 }
 
 func (biz *userFindBiz) Find(ctx context.Context, id string) (*usermodel.User, error) {
-	userId, err := primitive.ObjectIDFromHex(id)
-	if err != nil {
-		return nil, appCommon.ErrInvalidRequest(err)
-	}
-
-	data, err := biz.store.Find(ctx, bson.M{
-		"_id": userId,
-	})
+	data, err := biz.store.GetUser(ctx, id)
 	if err != nil {
 		if err == appCommon.ErrRecordNotFound {
 			return nil, appCommon.ErrEntityNotFound(usermodel.EntityName, err)

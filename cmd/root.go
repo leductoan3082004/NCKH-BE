@@ -9,6 +9,7 @@ import (
 	"nckh-BE/appCommon"
 	"nckh-BE/cmd/handler"
 	"nckh-BE/plugin/appredis"
+	usergrpcclient "nckh-BE/plugin/remotecall/grpc"
 	jwtProvider "nckh-BE/plugin/tokenprovider/jwt"
 )
 
@@ -21,6 +22,10 @@ func newService() goservice.Service {
 		goservice.WithInitRunnable(appredis.NewRedisDB("redis", appCommon.PluginRedis)),
 		goservice.WithInitRunnable(jwtProvider.NewJwtProvider("jwt", appCommon.PluginJWT)),
 		goservice.WithInitRunnable(aws.New("aws", appCommon.PluginAWS)),
+		goservice.WithInitRunnable(usergrpcclient.NewUserGRPC(
+			"user-client",
+			appCommon.PluginUserClient,
+		)),
 	)
 
 	if err := service.Init(); err != nil {
@@ -31,7 +36,7 @@ func newService() goservice.Service {
 
 var rootCmd = &cobra.Command{
 	Use:   "app",
-	Short: "Start a mindzone service",
+	Short: "Start a backend service",
 	Run: func(cmd *cobra.Command, args []string) {
 		service := newService()
 
@@ -39,9 +44,11 @@ var rootCmd = &cobra.Command{
 			handler.MainRoute(engine, service)
 		})
 
+		//go startGRPCService(service)
 		if err := service.Start(func() {}); err != nil {
 			panic(err)
 		}
+
 	},
 }
 
